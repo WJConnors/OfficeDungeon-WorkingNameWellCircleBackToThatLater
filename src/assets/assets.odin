@@ -12,7 +12,9 @@ Load_error :: enum {
     image_load_failure
 }
 
-loader :: proc(filename: string) -> (rl.Image, Load_error) {
+//load_image return a raylib image from a given filename
+//Image ownership is returned to the caller for cleanup
+load_image :: proc(filename: string) -> (rl.Image, Load_error) {
     c_filename, err := strings.clone_to_cstring(filename)
     if err != nil {
         return {}, .cstring_failure
@@ -32,7 +34,7 @@ main :: proc() {
         return
     }
 
-    spritesheet, err := loader(os.args[1])
+    spritesheet, err := load_image(os.args[1])
     if err != nil {
         fmt.println(err)
         return
